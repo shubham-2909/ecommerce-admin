@@ -1,7 +1,15 @@
 import NavBar from '@/components/Nav'
 import { useSession, signIn, signOut } from 'next-auth/react'
+import Loader from './Loader'
 export default function Layout({ children }) {
   const { data: session, status } = useSession()
+  if (status === 'loading') {
+    return (
+      <div className=' w-screen h-screen flex justify-center items-center'>
+        <Loader />
+      </div>
+    )
+  }
   if (!session) {
     return (
       <div className='bg-blue-900 w-screen h-screen flex justify-center items-center'>
