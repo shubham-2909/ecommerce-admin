@@ -5,8 +5,11 @@ export default function Layout({ children }) {
   const { data: session, status } = useSession()
   if (status === 'loading') {
     return (
-      <div className=' w-screen h-screen flex justify-center items-center'>
-        <Loader />
+      <div className='bg-blue-900 min-h-screen flex'>
+        <NavBar />
+        <div className='bg-white flex flex-grow mt-2 mr-2 mb-2 rounded-lg justify-center items-center'>
+          <Loader />
+        </div>
       </div>
     )
   }

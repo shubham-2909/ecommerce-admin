@@ -3,7 +3,8 @@
 @tailwind utilities;
 
 input,
-textarea {
+textarea,
+select {
   @apply border-2 border-gray-300 rounded-md w-full px-1 py-1 mb-3 ml-4 mr-4;
 }
 

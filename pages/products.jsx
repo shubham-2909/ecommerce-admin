@@ -23,6 +23,7 @@ export default function Products({ products }) {
       setLoading(false)
     }
   }
+
   return (
     <Layout>
       {isLoading && (
@@ -93,12 +94,15 @@ export default function Products({ products }) {
   )
 }
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
   const allProducts = await getAllProducts()
   const newProducts = allProducts.map((product) => {
     const { title, description, price, _id } = product
     const newId = _id.toString()
     return { title, description, price, _id: newId }
   })
-  return { props: { products: newProducts } }
+  return {
+    props: { products: newProducts },
+    revalidate: 10,
+  }
 }

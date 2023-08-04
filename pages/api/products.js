@@ -22,16 +22,27 @@ export default async function handler(req, res) {
     }
   }
   if (req.method === 'POST') {
-    const { title, description, price, images } = req.body
-    console.log(images)
+    const { title, description, price, images, category, properties } = req.body
     await connectDB()
+    let newProd
     try {
-      const newProd = await Product.create({
-        title,
-        description,
-        price,
-        images: images,
-      })
+      if (category === '') {
+        newProd = await Product.create({
+          title,
+          description,
+          price,
+          images: images,
+        })
+      } else {
+        newProd = await Product.create({
+          title,
+          description,
+          price,
+          images: images,
+          category,
+          properties,
+        })
+      }
       return res.status(201).json({ message: 'Product Created', newProd })
     } catch (error) {
       console.error(error)
@@ -39,12 +50,20 @@ export default async function handler(req, res) {
   }
   if (req.method === 'PUT') {
     try {
-      const { _id, title, description, price, images } = req.body
+      const { _id, title, description, price, images, category, properties } =
+        req.body
       const singleProduct = await Product.findById(_id)
       singleProduct.title = title
       singleProduct.price = price
       singleProduct.description = description
       singleProduct.images = images
+      if (category === '') {
+        singleProduct.category = undefined
+        singleProduct.properties = undefined
+      } else {
+        singleProduct.category = category
+        singleProduct.properties = properties
+      }
       await singleProduct.save()
       return res.status(200).json(singleProduct)
     } catch (error) {
