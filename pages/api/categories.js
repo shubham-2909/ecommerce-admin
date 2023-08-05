@@ -1,9 +1,11 @@
 import { connectDB } from '@/lib/mongoose'
 import { Category } from '@/models/Category'
+import { isAdmin } from './auth/[...nextauth]'
 
 export default async function handler(req, res) {
   const { method } = req
   await connectDB()
+  await isAdmin(req, res)
   if (method === 'GET') {
     const categories = await Category.find().populate('parent')
     res.status(200).json(categories)

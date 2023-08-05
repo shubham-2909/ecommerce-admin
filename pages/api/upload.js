@@ -3,9 +3,13 @@ import multiparty from 'multiparty'
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3'
 import fs from 'fs'
 import mime from 'mime-types'
+import { connectDB } from '@/lib/mongoose'
+import { isAdmin } from './auth/[...nextauth]'
 
 const bucketname = 'shubham-next-ecommerce'
 export default async function handler(req, res) {
+  await connectDB()
+  await isAdmin(req, res)
   const form = new multiparty.Form()
   const { fields, files } = await new Promise((resolve, reject) => {
     form.parse(req, (err, fields, files) => {

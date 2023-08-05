@@ -1,5 +1,6 @@
 import { connectDB } from '@/lib/mongoose'
 import { Product } from '@/models/Product'
+import { isAdmin } from './auth/[...nextauth]'
 
 export const getAllProducts = async () => {
   await connectDB()
@@ -7,6 +8,7 @@ export const getAllProducts = async () => {
   return allProducts
 }
 export default async function handler(req, res) {
+  await isAdmin(req, res)
   if (req.method == 'GET') {
     await connectDB()
     if (req.query.id) {
